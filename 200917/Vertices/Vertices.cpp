@@ -87,9 +87,9 @@ HRESULT InitVB()
     // Initialize three Vertices for rendering a triangle
     CUSTOMVERTEX Vertices[] =
     {
-        { 150.0f,  50.0f, 0.5f, 1.0f, 0xffff0000, }, // x, y, z, rhw, color
-        { 250.0f, 250.0f, 0.5f, 1.0f, 0xff00ff00, },
-        {  50.0f, 250.0f, 0.5f, 1.0f, 0xff00ffff, },
+        { 160.0f, 30.0f, 0.5f, 1.0f, 0xffffffff, }, // x, y, z, rhw, color
+        { 250.0f, 20.0f, 0.5f, 1.0f, 0xff00ff00, },
+        { 150.0f, 120.0f, 0.5f, 1.0f, 0xff00ffff, },
     };
 
     // Create the vertex buffer. Here we are allocating enough memory
