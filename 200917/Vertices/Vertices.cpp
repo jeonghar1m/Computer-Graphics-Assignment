@@ -25,6 +25,7 @@
 LPDIRECT3D9             g_pD3D = NULL; // Used to create the D3DDevice
 LPDIRECT3DDEVICE9       g_pd3dDevice = NULL; // Our rendering device
 LPDIRECT3DVERTEXBUFFER9 g_pVB = NULL; // Buffer to hold Vertices
+LPDIRECT3DVERTEXBUFFER9 g_pVB2 = NULL; // Buffer to hold Vertices
 
 // A structure for our custom vertex type
 struct CUSTOMVERTEX
@@ -102,13 +103,32 @@ HRESULT InitVB()
         return E_FAIL;
     }
 
-    // Now we fill the vertex buffer. To do this, we need to Lock() the VB to
-    // gain access to the Vertices. This mechanism is required becuase vertex
-    // buffers may be in device memory.
     VOID* pVertices;
     if( FAILED( g_pVB->Lock( 0, sizeof( Vertices ), ( void** )&pVertices, 0 ) ) )
         return E_FAIL;
     memcpy( pVertices, Vertices, sizeof( Vertices ) );
+
+    CUSTOMVERTEX Vertices2[] =
+    {
+        { 300.0f, 30.0f, 0.5f, 1.0f, 0xffffffff, }, // x, y, z, rhw, color
+        { 550.0f, 20.0f, 0.5f, 1.0f, 0xff00ff00, },
+        { 450.0f, 120.0f, 0.5f, 1.0f, 0xff00ffff, },
+    };
+
+    // Create the vertex buffer. Here we are allocating enough memory
+    // (from the default pool) to hold all our 3 custom Vertices. We also
+    // specify the FVF, so the vertex buffer knows what data it contains.
+    if (FAILED(g_pd3dDevice->CreateVertexBuffer(3 * sizeof(CUSTOMVERTEX),
+        0, D3DFVF_CUSTOMVERTEX,
+        D3DPOOL_DEFAULT, &g_pVB2, NULL)))
+    {
+        return E_FAIL;
+    }
+
+    VOID* pVertices2;
+    if (FAILED(g_pVB2->Lock(0, sizeof(Vertices2), (void**)&g_pVB2, 0)))
+        return E_FAIL;
+    memcpy(pVertices2, Vertices2, sizeof(Vertices2));
     g_pVB->Unlock();
 
     return S_OK;
@@ -148,17 +168,13 @@ VOID Render()
     // Begin the scene
     if( SUCCEEDED( g_pd3dDevice->BeginScene() ) )
     {
-        // Draw the triangles in the vertex buffer. This is broken into a few
-        // steps. We are passing the Vertices down a "stream", so first we need
-        // to specify the source of that stream, which is our vertex buffer. Then
-        // we need to let D3D know what vertex shader to use. Full, custom vertex
-        // shaders are an advanced topic, but in most cases the vertex shader is
-        // just the FVF, so that D3D knows what type of Vertices we are dealing
-        // with. Finally, we call DrawPrimitive() which does the actual rendering
-        // of our geometry (in this case, just one triangle).
         g_pd3dDevice->SetStreamSource( 0, g_pVB, 0, sizeof( CUSTOMVERTEX ) );
         g_pd3dDevice->SetFVF( D3DFVF_CUSTOMVERTEX );
         g_pd3dDevice->DrawPrimitive( D3DPT_TRIANGLELIST, 0, 1 );
+
+        g_pd3dDevice->SetStreamSource(0, g_pVB, 0, sizeof(CUSTOMVERTEX));
+        g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
+        g_pd3dDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
 
         // End the scene
         g_pd3dDevice->EndScene();
@@ -212,6 +228,10 @@ INT WINAPI wWinMain( HINSTANCE hInst, HINSTANCE, LPWSTR, INT )
     HWND hWnd = CreateWindow( L"D3D Tutorial", L"D3D Tutorial 02: Vertices",
                               WS_OVERLAPPEDWINDOW, 100, 100, 300, 300,
                               NULL, NULL, wc.hInstance, NULL );
+
+    HWND hWnd2 = CreateWindow(L"D3D Tutorial", L"D3D Tutorial 02: Vertices2",
+        WS_OVERLAPPEDWINDOW, 100, 100, 300, 300,
+        NULL, NULL, wc.hInstance, NULL);
 
     // Initialize Direct3D
     if( SUCCEEDED( InitD3D( hWnd ) ) )
