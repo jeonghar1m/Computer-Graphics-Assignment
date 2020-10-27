@@ -111,12 +111,12 @@ HRESULT InitD3D( HWND hWnd )
 HRESULT InitGeometry()
 {
     // Use D3DX to create a texture from a file based image
-    if( FAILED( D3DXCreateTextureFromFile( g_pd3dDevice, L"banana.bmp", &g_pTexture ) ) )
+    if( FAILED( D3DXCreateTextureFromFile( g_pd3dDevice, L"cocacola.bmp", &g_pTexture ) ) )
     {
         // If texture is not in current folder, try parent folder
-        if( FAILED( D3DXCreateTextureFromFile( g_pd3dDevice, L"..\\banana.bmp", &g_pTexture ) ) )
+        if( FAILED( D3DXCreateTextureFromFile( g_pd3dDevice, L"..\\cocacola.bmp", &g_pTexture ) ) )
         {
-            MessageBox( NULL, L"Could not find banana.bmp", L"Textures.exe", MB_OK );
+            MessageBox( NULL, L"Could not find cocacola.bmp", L"Textures.exe", MB_OK );
             return E_FAIL;
         }
     }
