@@ -30,7 +30,7 @@ void cleanD3D(void); // closes Direct3D and releases memory
 
 // the WindowProc function prototype
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-D3DXVECTOR3 position(550.0f, 350.0f, 0.0f);    // position at 50, 50 with no depth
+D3DXVECTOR3 position(150.0f, 350.0f, 0.0f);    // position at 50, 50 with no depth
 
 // the entry point for any Windows program
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -141,6 +141,7 @@ void initD3D(HWND hWnd)
 
     D3DXCreateSprite(d3ddev, &d3dspt);    // create the Direct3D Sprite object
     D3DXCreateTextureFromFile(d3ddev, L"nyan_cat.png", &sprite);
+    D3DXCreateTextureFromFile(d3ddev, L"bullet.png", &g_pBullet);
     return;
 
 }
