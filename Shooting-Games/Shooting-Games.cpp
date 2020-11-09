@@ -19,9 +19,11 @@
 LPDIRECT3D9 d3d;    // the pointer to our Direct3D interface
 LPDIRECT3DDEVICE9 d3ddev;    // the pointer to the device class
 LPD3DXSPRITE d3dspt;    // the pointer to our Direct3D Sprite interface
+LPD3DXSPRITE g_pd3dDevice;
 
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 g_pBullet;
 
 // function prototypes
 void initD3D(HWND hWnd); // sets up and initializes Direct3D
@@ -30,7 +32,8 @@ void cleanD3D(void); // closes Direct3D and releases memory
 
 // the WindowProc function prototype
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-D3DXVECTOR3 position(550.0f, 350.0f, 0.0f);    // position at 50, 50 with no depth
+D3DXVECTOR3 position(0.0f, 350.0f, 0.0f);    // position at 50, 50 with no depth
+D3DXVECTOR3 bulletPosition(0.0f, 350.0f, 0.0f);
 
 // the entry point for any Windows program
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -112,10 +115,6 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-
-
-
-
 // this function initializes and prepares Direct3D for use
 void initD3D(HWND hWnd)
 {
@@ -140,7 +139,9 @@ void initD3D(HWND hWnd)
         &d3ddev);
 
     D3DXCreateSprite(d3ddev, &d3dspt);    // create the Direct3D Sprite object
+    D3DXCreateSprite(d3ddev, &g_pd3dDevice);
     D3DXCreateTextureFromFile(d3ddev, L"nyan_cat.png", &sprite);
+    D3DXCreateTextureFromFile(d3ddev, L"bullet.png", &g_pBullet);
     return;
 
 }
@@ -153,6 +154,7 @@ void render_frame(void)
     d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
     d3ddev->BeginScene();    // begins the 3D scene
     d3dspt->Begin(NULL);    // begin sprite drawing
+    g_pd3dDevice->Begin(NULL);
 
     // draw the sprite
     D3DXVECTOR3 center(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
@@ -168,9 +170,11 @@ void render_frame(void)
     if (KEY_DOWN(VK_DOWN))
         position.y += speed;
 
-    if (KEY_DOWN(VK_SPACE)) {}
+    if (KEY_DOWN(VK_SPACE))
+        bulletPosition.x++;
 
     d3dspt->Draw(sprite, NULL, &center, &position, D3DCOLOR_XRGB(255, 255, 255));
+    g_pd3dDevice->Draw(sprite, NULL, &center, &bulletPosition, D3DCOLOR_XRGB(255, 255, 255));
     d3dspt->End();    // end sprite drawing
     d3ddev->EndScene();    // ends the 3D scene
     d3ddev->Present(NULL, NULL, NULL, NULL);
@@ -184,5 +188,6 @@ void cleanD3D(void)
     d3dspt->Release();
     d3ddev->Release();
     d3d->Release();
+    g_pd3dDevice->Release();
     return;
 }
