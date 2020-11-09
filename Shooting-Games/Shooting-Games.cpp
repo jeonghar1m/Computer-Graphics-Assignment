@@ -148,6 +148,7 @@ void initD3D(HWND hWnd)
 // this is the function used to render a single frame
 void render_frame(void)
 {
+    int speed = 5;
     // clear the window to a deep blue
     d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
     d3ddev->BeginScene();    // begins the 3D scene
@@ -155,14 +156,19 @@ void render_frame(void)
 
     // draw the sprite
     D3DXVECTOR3 center(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+    if(KEY_DOWN(VK_SHIFT))  //DASH
+        speed = 10;
+
     if (KEY_DOWN(VK_LEFT))
-        position.x -= 10;
+        position.x -= speed;
     if (KEY_DOWN(VK_RIGHT))
-        position.x += 10;
+        position.x += speed;
     if (KEY_DOWN(VK_UP))
-        position.y -= 10;
+        position.y -= speed;
     if (KEY_DOWN(VK_DOWN))
-        position.y += 10;
+        position.y += speed;
+
+    if (KEY_DOWN(VK_SPACE)) {}
 
     d3dspt->Draw(sprite, NULL, &center, &position, D3DCOLOR_XRGB(255, 255, 255));
     d3dspt->End();    // end sprite drawing
