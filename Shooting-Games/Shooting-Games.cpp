@@ -141,7 +141,7 @@ void initD3D(HWND hWnd)
 
     D3DXCreateSprite(d3ddev, &d3dspt);    // create the Direct3D Sprite object
     D3DXCreateTextureFromFile(d3ddev, L"nyan_cat.png", &sprite);
-    D3DXCreateTextureFromFile(d3ddev, L"bullet.png", &g_pBullet);
+    //D3DXCreateTextureFromFile(d3ddev, L"bullet.png", &g_pBullet);
     return;
 
 }
