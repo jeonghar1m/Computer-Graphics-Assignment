@@ -18,12 +18,23 @@
 // global declarations
 LPDIRECT3D9 d3d;    // the pointer to our Direct3D interface
 LPDIRECT3DDEVICE9 d3ddev;    // the pointer to the device class
+LPDIRECT3DDEVICE9 bullet_d3ddev;
 LPD3DXSPRITE d3dspt;    // the pointer to our Direct3D Sprite interface
+<<<<<<< Updated upstream
 LPD3DXSPRITE g_pd3dDevice;
 
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 g_pBullet;
+=======
+LPD3DXSPRITE bullet_d3dspt;
+LPD3DXSPRITE g_pd3dDevice;
+LPD3DXSPRITE g_pBullet;
+
+// sprite declarations
+LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 bulletSprite;
+>>>>>>> Stashed changes
 
 // function prototypes
 void initD3D(HWND hWnd); // sets up and initializes Direct3D
@@ -106,11 +117,11 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
     switch (message)
     {
-        case WM_DESTROY:
-        {
-            PostQuitMessage(0);
-            return 0;
-        } break;
+    case WM_DESTROY:
+    {
+        PostQuitMessage(0);
+        return 0;
+    } break;
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -140,8 +151,15 @@ void initD3D(HWND hWnd)
 
     D3DXCreateSprite(d3ddev, &d3dspt);    // create the Direct3D Sprite object
     D3DXCreateSprite(d3ddev, &g_pd3dDevice);
+<<<<<<< Updated upstream
     D3DXCreateTextureFromFile(d3ddev, L"nyan_cat.png", &sprite);
     D3DXCreateTextureFromFile(d3ddev, L"bullet.png", &g_pBullet);
+=======
+    D3DXCreateSprite(bullet_d3ddev, &bullet_d3dspt);    // create the Direct3D Sprite object
+    D3DXCreateSprite(bullet_d3ddev, &g_pBullet);
+    D3DXCreateTextureFromFile(d3ddev, L"nyan_cat.png", &sprite);
+    D3DXCreateTextureFromFile(bullet_d3ddev, L"bullet.png", &bulletSprite);
+>>>>>>> Stashed changes
     return;
 
 }
@@ -152,13 +170,21 @@ void render_frame(void)
     int speed = 5;
     // clear the window to a deep blue
     d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
+    bullet_d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
     d3ddev->BeginScene();    // begins the 3D scene
+    bullet_d3ddev->BeginScene();
     d3dspt->Begin(NULL);    // begin sprite drawing
+<<<<<<< Updated upstream
     g_pd3dDevice->Begin(NULL);
+=======
+    bullet_d3dspt->Begin(NULL);
+    g_pd3dDevice->Begin(NULL);
+    g_pBullet->Begin(NULL);
+>>>>>>> Stashed changes
 
     // draw the sprite
     D3DXVECTOR3 center(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-    if(KEY_DOWN(VK_SHIFT))  //DASH
+    if (KEY_DOWN(VK_SHIFT))  //DASH
         speed = 10;
 
     if (KEY_DOWN(VK_LEFT))
@@ -174,10 +200,17 @@ void render_frame(void)
         bulletPosition.x++;
 
     d3dspt->Draw(sprite, NULL, &center, &position, D3DCOLOR_XRGB(255, 255, 255));
+<<<<<<< Updated upstream
     g_pd3dDevice->Draw(sprite, NULL, &center, &bulletPosition, D3DCOLOR_XRGB(255, 255, 255));
+=======
+    g_pd3dDevice->Draw(bulletSprite, NULL, &center, &bulletPosition, D3DCOLOR_XRGB(255, 255, 255));
+>>>>>>> Stashed changes
     d3dspt->End();    // end sprite drawing
+    bullet_d3dspt->End();
     d3ddev->EndScene();    // ends the 3D scene
+    bullet_d3ddev->EndScene();
     d3ddev->Present(NULL, NULL, NULL, NULL);
+    bullet_d3ddev->Present(NULL, NULL, NULL, NULL);
     return;
 }
 
@@ -185,8 +218,11 @@ void render_frame(void)
 void cleanD3D(void)
 {
     sprite->Release();
+    bulletSprite->Release();
     d3dspt->Release();
+    bullet_d3dspt->Release();
     d3ddev->Release();
+    bullet_d3ddev->Release();
     d3d->Release();
     g_pd3dDevice->Release();
     return;
