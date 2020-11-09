@@ -161,13 +161,13 @@ void render_frame(void)
     if (KEY_DOWN(VK_SHIFT))  //DASH
         speed = 10;
 
-    if (KEY_DOWN(VK_LEFT))
+    if (KEY_DOWN(VK_LEFT) && position.x >= 0)
         position.x -= speed;
-    if (KEY_DOWN(VK_RIGHT))
+    if (KEY_DOWN(VK_RIGHT) && position.x <= 1650)
         position.x += speed;
-    if (KEY_DOWN(VK_UP))
+    if (KEY_DOWN(VK_UP) && position.y >= 0)
         position.y -= speed;
-    if (KEY_DOWN(VK_DOWN))
+    if (KEY_DOWN(VK_DOWN) && position.y <= 950)
         position.y += speed;
 
     if (KEY_DOWN(VK_SPACE))
