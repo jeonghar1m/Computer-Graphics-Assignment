@@ -24,8 +24,6 @@ LPD3DXSPRITE d3dspt;    // the pointer to our Direct3D Sprite interface
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 g_pBullet = NULL;
 
-D3DXVECTOR3 vecPosBullet;
-
 // function prototypes
 void initD3D(HWND hWnd); // sets up and initializes Direct3D
 void render_frame(void); // renders a single frame
@@ -33,8 +31,8 @@ void cleanD3D(void); // closes Direct3D and releases memory
 
 // the WindowProc function prototype
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-D3DXVECTOR3 position(550.0f, 350.0f, 0.0f);    // position at 50, 50 with no depth
-D3DXVECTOR3 bulletPosition;
+D3DXVECTOR3 position(150.0f, 350.0f, 0.0f);    // position at 50, 50 with no depth
+D3DXVECTOR3 vecPosBullet;
 
 // the entry point for any Windows program
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -116,10 +114,6 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-
-
-
-
 // this function initializes and prepares Direct3D for use
 void initD3D(HWND hWnd)
 {
@@ -189,10 +183,10 @@ void render_frame(void)
     }
 
     if (KEY_DOWN(VK_SPACE))
-        bulletPosition.x += 5.0f;
+        vecPosBullet.x += 5.0f;
 
     d3dspt->Draw(sprite, NULL, &center, &position, D3DCOLOR_XRGB(255, 255, 255));
-    d3dspt->Draw(g_pBullet, NULL, &center, &bulletPosition, D3DCOLOR_XRGB(255, 255, 255));
+    d3dspt->Draw(g_pBullet, &rcSrcBullet, &center, &vecPosBullet, D3DCOLOR_XRGB(255, 255, 255));
     d3dspt->End();    // end sprite drawing
     d3ddev->EndScene();    // ends the 3D scene
     d3ddev->Present(NULL, NULL, NULL, NULL);
