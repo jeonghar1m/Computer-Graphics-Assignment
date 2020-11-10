@@ -22,12 +22,9 @@ LPD3DXSPRITE d3dspt;    // the pointer to our Direct3D Sprite interface
 
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
-<<<<<<< Updated upstream
-=======
 LPDIRECT3DTEXTURE9 g_pBullet = NULL;
 
 D3DXVECTOR3 vecPosBullet;
->>>>>>> Stashed changes
 
 // function prototypes
 void initD3D(HWND hWnd); // sets up and initializes Direct3D
@@ -36,12 +33,8 @@ void cleanD3D(void); // closes Direct3D and releases memory
 
 // the WindowProc function prototype
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-<<<<<<< Updated upstream
-D3DXVECTOR3 position(150.0f, 350.0f, 0.0f);    // position at 50, 50 with no depth
-=======
 D3DXVECTOR3 position(550.0f, 350.0f, 0.0f);    // position at 50, 50 with no depth
 D3DXVECTOR3 bulletPosition;
->>>>>>> Stashed changes
 
 // the entry point for any Windows program
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -114,11 +107,11 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
     switch (message)
     {
-        case WM_DESTROY:
-        {
-            PostQuitMessage(0);
-            return 0;
-        } break;
+    case WM_DESTROY:
+    {
+        PostQuitMessage(0);
+        return 0;
+    } break;
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -152,11 +145,7 @@ void initD3D(HWND hWnd)
 
     D3DXCreateSprite(d3ddev, &d3dspt);    // create the Direct3D Sprite object
     D3DXCreateTextureFromFile(d3ddev, L"nyan_cat.png", &sprite);
-<<<<<<< Updated upstream
-    //D3DXCreateTextureFromFile(d3ddev, L"bullet.png", &g_pBullet);
-=======
     D3DXCreateTextureFromFile(d3ddev, L"bullet.jpg", &g_pBullet);
->>>>>>> Stashed changes
     return;
 
 }
@@ -179,28 +168,19 @@ void render_frame(void)
 
     // draw the sprite
     D3DXVECTOR3 center(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-<<<<<<< Updated upstream
-    if(KEY_DOWN(VK_SHIFT))  //DASH
-=======
 
     if (KEY_DOWN(VK_SHIFT))  //DASH
->>>>>>> Stashed changes
         speed = 10;
 
-    if (KEY_DOWN(VK_LEFT))
+    if (KEY_DOWN(VK_LEFT) && position.x >= 0)
         position.x -= speed;
-    if (KEY_DOWN(VK_RIGHT))
+    if (KEY_DOWN(VK_RIGHT) && position.x <= 1650)
         position.x += speed;
-    if (KEY_DOWN(VK_UP))
+    if (KEY_DOWN(VK_UP) && position.y >= 0)
         position.y -= speed;
-    if (KEY_DOWN(VK_DOWN))
+    if (KEY_DOWN(VK_DOWN) && position.y <= 950)
         position.y += speed;
 
-<<<<<<< Updated upstream
-    if (KEY_DOWN(VK_SPACE)) {}
-
-    d3dspt->Draw(sprite, NULL, &center, &position, D3DCOLOR_XRGB(255, 255, 255));
-=======
     if (GetKeyState(0x5a) & 0x80000000)
     {
         vecPosBullet.x = position.x + 60.0f - 6.0f;
@@ -213,7 +193,6 @@ void render_frame(void)
 
     d3dspt->Draw(sprite, NULL, &center, &position, D3DCOLOR_XRGB(255, 255, 255));
     d3dspt->Draw(g_pBullet, NULL, &center, &bulletPosition, D3DCOLOR_XRGB(255, 255, 255));
->>>>>>> Stashed changes
     d3dspt->End();    // end sprite drawing
     d3ddev->EndScene();    // ends the 3D scene
     d3ddev->Present(NULL, NULL, NULL, NULL);
